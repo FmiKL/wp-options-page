@@ -1,12 +1,19 @@
 <?php
 /**
  * Class used to create a new options page.
+ * 
+ * @package WP_Options_Page
+ * @author Mikael Fourré
+ * @version 1.0.0
+ * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
     /**
      * Path to the assets.
      * 
      * @var string
+     * @since 1.0.0
+     * @see Option_Page::enqueues_scripts()
      */
     private const ASSETS_PATH = '/assets';
 
@@ -14,6 +21,7 @@ class Option_Page {
      * Title of the page.
      * 
      * @var string
+     * @since 1.0.0
      */
     private $title;
 
@@ -21,6 +29,7 @@ class Option_Page {
      * Unique identifier needed to register the settings.
      * 
      * @var string
+     * @since 1.0.0
      */
     private $key;
 
@@ -28,12 +37,15 @@ class Option_Page {
      * Fields to create.
      * 
      * @var array<string, array>
+     * @since 1.0.0
+     * @see Option_Page::add_field()
      */
     private $fields = array();
 
     /**
      * @param string $title Title of the page.
      * @param string $key   Unique identifier needed to register the settings.
+     * @since 1.0.0
      */
     public function __construct( $title, $key ) {
         $this->title = $title;
@@ -43,6 +55,8 @@ class Option_Page {
 
     /**
      * Adds hooks the methods to the appropriate actions.
+     * 
+     * @since 1.0.0
      */
     private function add_hooks() {
         add_action( 'admin_menu', array( $this, 'add_page' ) );
@@ -59,6 +73,7 @@ class Option_Page {
      *                        If the placeholder contains a reserved word (e.g., "image", "avatar" or "icon"),
      *                        a double-click will trigger the WordPress media library to open directly.
      *                        If the placeholder contains an indication of an image size "{size}px", the selected image will be the one closest to this size.
+     * @since 1.0.0
      */
     public function add_field( $type, $name, $options = array() ) {
         $types = array( 'type' => $type );
@@ -67,6 +82,9 @@ class Option_Page {
 
     /**
      * Adds a page to the WordPress admin area.
+     * 
+     * @since 1.0.0
+     * @link https://developer.wordpress.org/reference/functions/add_options_page/
      */
     public function add_page() {
         add_options_page( $this->title, $this->title, 'manage_options', $this->key, array( $this, 'render_form' ) );
@@ -74,6 +92,8 @@ class Option_Page {
 
     /**
      * Renders the form for the options page.
+     * 
+     * @since 1.0.0
      */
     public function render_form() {
         ?>
@@ -122,6 +142,8 @@ class Option_Page {
 
     /**
      * Enqueues the necessary scripts.
+     * 
+     * @since 1.0.0
      */
     public function enqueues_scripts() {
         wp_enqueue_media();
@@ -133,6 +155,9 @@ class Option_Page {
 
     /**
      * Registers the settings.
+     * 
+     * @since 1.0.0
+     * @link https://developer.wordpress.org/reference/functions/register_setting/
      */
     public function register_setting() {
         foreach ( $this->fields as $name => $field ) {
