@@ -4,6 +4,13 @@
  */
 class Option_Page {
     /**
+     * Path to the assets.
+     * 
+     * @var string
+     */
+    private const ASSETS_PATH = '/assets';
+
+    /**
      * Title of the page.
      * 
      * @var string
@@ -40,6 +47,7 @@ class Option_Page {
     private function add_hooks() {
         add_action( 'admin_menu', array( $this, 'add_page' ) );
         add_action( 'admin_init', array( $this, 'register_setting' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueues_scripts' ) );
     }
 
     /**
@@ -48,6 +56,9 @@ class Option_Page {
      * @param string $type    Type of the field.
      * @param string $name    Name of the field.
      * @param array  $options Additional options for the field. Can include label and placeholder.
+     *                        If the placeholder contains a reserved word (e.g., "image", "avatar" or "icon"),
+     *                        a double-click will trigger the WordPress media library to open directly.
+     *                        If the placeholder contains an indication of an image size "{size}px", the selected image will be the one closest to this size.
      */
     public function add_field( $type, $name, $options = array() ) {
         $types = array( 'type' => $type );
@@ -107,6 +118,17 @@ class Option_Page {
             </form>
         </div>
         <?php
+    }
+
+    /**
+     * Enqueues the necessary scripts.
+     */
+    public function enqueues_scripts() {
+        wp_enqueue_media();
+
+        if ( ! wp_script_is( 'field-media', 'registered' ) ) {
+            wp_enqueue_script( 'field-media', get_template_directory_uri() . self::ASSETS_PATH . '/js/field-media.js', array(), false, true );
+        }
     }
 
     /**
