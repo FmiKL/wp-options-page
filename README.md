@@ -14,7 +14,7 @@ This repository introduces a PHP class designed to simplify the creation of cust
 2. Import the class into your `functions.php` file or your plugin.
 
 ```php
-require_once 'path/to/class-option-page.php';
+require_once 'path/to/wp-options-page/class-option-page.php';
 ```
 
 ## Usage example
