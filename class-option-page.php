@@ -15,7 +15,7 @@ class Option_Page {
      * @since 1.0.0
      * @see Option_Page::enqueues_scripts()
      */
-    private const ASSETS_PATH = '/assets';
+    private const ASSETS_PATH = '/wp-options-page/assets';
 
     /**
      * Title of the page.
