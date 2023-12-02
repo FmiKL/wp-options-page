@@ -4,11 +4,11 @@ This repository introduces a PHP class designed to simplify the creation of cust
 
 ## Features
 
-- **Ease of options page creation**: Enables the easy creation of options pages within WordPress.
-- **Customizable fields**: Supports various field types such as text, checkbox, email, color, etc.
-- **Advanced media integration**: Specific keywords in placeholders trigger the opening of the WordPress media library.
+- **Ease of Options Page Creation**: Enables the easy creation of options pages within WordPress.
+- **Customizable Fields**: Supports various field types such as text, checkbox, email, color, etc.
+- **Advanced Media Integration**: Specific keywords in placeholders trigger the opening of the WordPress media library.
 
-## Installation and setup
+## Installation and Setup
 
 1. Clone or download this repository into your WordPress environment.
 2. Import the class into your `functions.php` file or your plugin.
@@ -17,7 +17,7 @@ This repository introduces a PHP class designed to simplify the creation of cust
 require_once 'path/to/wp-options-page/class-option-page.php';
 ```
 
-## Usage example
+## Usage Example
 
 ```php
 function add_params_options_page() {
