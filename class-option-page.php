@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.1.0
+ * @version 1.2.0
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -113,6 +113,9 @@ class Option_Page {
                         <td>
                         <?php
                         switch ( $field['type'] ) {
+                            case 'textarea':
+                                $this->render_textarea_field( $name, $field );
+                                break;
                             case 'select':
                                 $this->render_select_field( $name, $field );
                                 break;
@@ -132,6 +135,24 @@ class Option_Page {
                 <?php submit_button(); ?>
             </form>
         </div>
+        <?php
+    }
+
+    /**
+     * Renders the textarea field.
+     *
+     * @param string $name  Name of the field.
+     * @param array  $field Field to render an input for.
+     * @since 1.2.0
+     */
+    private function render_textarea_field( $name, $field ) {
+        ?>
+        <textarea
+            id="<?php echo esc_attr( $name ); ?>"
+            class="regular-text"
+            name="<?php echo esc_attr( $name ); ?>"
+            placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+        ><?php echo esc_textarea( get_option( $name ) ); ?></textarea>
         <?php
     }
 
