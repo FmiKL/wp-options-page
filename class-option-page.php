@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.0.0
+ * @version 1.0.1
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -111,24 +111,16 @@ class Option_Page {
                             <?php endif; ?>
                         </th>
                         <td>
-                            <?php if ( $field['type'] === 'checkbox' ) : ?>
-                                <input
-                                    type="checkbox"
-                                    id="<?php echo esc_attr( $name ); ?>"
-                                    name="<?php echo esc_attr( $name ); ?>"
-                                    value="1"
-                                    <?php checked( 1, get_option( $name ), true ); ?>
-                                >
-                            <?php else: ?>
-                                <input
-                                    type="<?php echo esc_attr( $field['type'] ?? 'text' ); ?>" 
-                                    id="<?php echo esc_attr( $name ); ?>" 
-                                    class="regular-text"
-                                    name="<?php echo esc_attr( $name ); ?>" 
-                                    value="<?php echo esc_attr( get_option( $name ) ); ?>"
-                                    placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
-                                >
-                            <?php endif; ?>
+                        <?php
+                        switch ( $field['type'] ) {
+                            case 'checkbox':
+                                $this->render_checkbox_field( $name );
+                                break;
+                            default:
+                                $this->render_input_field( $name, $field );
+                                break;
+                        }
+                        ?>
                         </td>
                         </tr>
                     <?php endforeach; ?>
@@ -137,6 +129,44 @@ class Option_Page {
                 <?php submit_button(); ?>
             </form>
         </div>
+        <?php
+    }
+
+    /**
+     * Renders the checkbox field.
+     * 
+     * @param string $name Name of the field.
+     * @since 1.0.1
+     */
+    private function render_checkbox_field( $name ) {
+        ?>
+        <input
+            type="checkbox"
+            id="<?php echo esc_attr( $name ); ?>"
+            name="<?php echo esc_attr( $name ); ?>"
+            value="1"
+            <?php checked( 1, get_option( $name ), true ); ?>
+        >
+        <?php
+    }
+
+    /**
+     * Renders the input field.
+     * 
+     * @param string $name  Name of the field.
+     * @param array  $field Field to render an input for.
+     * @since 1.0.1
+     */
+    private function render_input_field( $name, $field ) {
+        ?>
+        <input
+            type="<?php echo esc_attr( $field['type'] ?? 'text' ); ?>"
+            id="<?php echo esc_attr( $name ); ?>"
+            class="regular-text"
+            name="<?php echo esc_attr( $name ); ?>"
+            value="<?php echo esc_attr( get_option( $name ) ); ?>"
+            placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+        >
         <?php
     }
 
