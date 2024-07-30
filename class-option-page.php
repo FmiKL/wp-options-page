@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.0.1
+ * @version 1.1.0
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -113,6 +113,9 @@ class Option_Page {
                         <td>
                         <?php
                         switch ( $field['type'] ) {
+                            case 'select':
+                                $this->render_select_field( $name, $field );
+                                break;
                             case 'checkbox':
                                 $this->render_checkbox_field( $name );
                                 break;
@@ -129,6 +132,30 @@ class Option_Page {
                 <?php submit_button(); ?>
             </form>
         </div>
+        <?php
+    }
+
+    /**
+     * Renders the select field.
+     * 
+     * @param string $name  Name of the field.
+     * @param array  $field Field to render an input for.
+     * @since 1.1.0
+     */
+    private function render_select_field( $name, $field ) {
+        $current_value = get_option( $name );
+        ?>
+        <select
+            id="<?php echo esc_attr( $name ); ?>"
+            class="regular-text"
+            name="<?php echo esc_attr( $name ); ?>"
+        >
+            <?php foreach ( $field['options'] as $option ) : ?>
+                <option value="<?php echo esc_attr( $option ); ?>" <?php selected( $current_value, $option ); ?>>
+                    <?php echo esc_html( $option ); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
         <?php
     }
 
