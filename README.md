@@ -5,7 +5,7 @@ This repository introduces a PHP class designed to simplify the creation of cust
 ## Features
 
 - **Ease of Options Page Creation**: Enables the easy creation of options pages within WordPress.
-- **Customizable Fields**: Supports various field types such as text, checkbox, email, color, etc.
+- **Customizable Fields**: Supports various field types such as textarea, select, text, checkbox, email, color, etc.
 - **Advanced Media Integration**: Specific keywords in placeholders trigger the opening of the WordPress media library.
 
 ## Installation and Setup
@@ -33,11 +33,14 @@ function add_params_options_page() {
     );
 
     $option->add_field(
-        'email',
-        'my_param_email',
+        'select',
+        'my_param_option',
         array(
-            'label'       => 'Email',
-            'placeholder' => 'Enter your email',
+            'label'   => 'Option',
+            'options' => [
+                'Option 1',
+                'Option 2',
+            ],
         )
     );
 
