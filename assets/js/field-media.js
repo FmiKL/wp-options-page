@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-    const inputMatch = /image|avatar|icon/i;
+    const inputMatch = /image|avatar|icon|pdf/i;
     let mediaUploader;
 
     $(document).on('dblclick', 'input', function(e) {
@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
 
         mediaUploader.on('select', function() {
             const attachment = mediaUploader.state().get('selection').first().toJSON();
-            const imageUrl = attachment.url;
+            const attachmentUrl = attachment.url;
             const matches = $(input).attr('placeholder').match(/\d+px/);
 
             if (matches && attachment.sizes && Object.keys(attachment.sizes).length > 0) {
@@ -32,12 +32,12 @@ jQuery(document).ready(function($) {
                 if (attachment.sizes[sizes[0]].width < attachment.width) {
                     thumbnailUrl = attachment.sizes[sizes[0]].url;
                 } else {
-                    thumbnailUrl = imageUrl;
+                    thumbnailUrl = attachmentUrl;
                 }
 
                 $(input).val(thumbnailUrl);
             } else {
-                $(input).val(imageUrl);
+                $(input).val(attachmentUrl);
             }
 
             mediaUploader = null;
