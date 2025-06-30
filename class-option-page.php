@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.2.0
+ * @version 1.2.1
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -152,6 +152,7 @@ class Option_Page {
             class="regular-text"
             name="<?php echo esc_attr( $name ); ?>"
             placeholder="<?php echo esc_attr( $field['placeholder'] ?? '' ); ?>"
+            rows="<?php echo esc_attr( $field['rows'] ?? '10' ); ?>"
         ><?php echo esc_textarea( get_option( $name ) ); ?></textarea>
         <?php
     }
