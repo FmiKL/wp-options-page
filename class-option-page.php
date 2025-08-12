@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.2.1
+ * @version 1.3.0
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -101,41 +101,112 @@ class Option_Page {
             <h1><?php echo esc_html( $this->title ); ?></h1>
             <form method="post" action="options.php">
                 <?php settings_fields( $this->key ); ?>
+                <?php
+                if ( ! empty( $this->sections ) ) :
+                    foreach ( $this->sections as $section_id => $section ) :
+                        $section_fields = array();
+                        foreach ( $this->fields as $name => $field ) {
+                            if ( isset( $field['section'] ) && $field['section'] === $section_id ) {
+                                $section_fields[ $name ] = $field;
+                            }
+                        }
+                        if ( empty( $section_fields ) ) {
+                            continue;
+                        }
+                        ?>
+                        <h2><?php echo esc_html( $section['title'] ); ?></h2>
+                        <?php if ( ! empty( $section['description'] ) ) : ?>
+                            <p class="description"><?php echo esc_html( $section['description'] ); ?></p>
+                        <?php endif; ?>
+                        <table class="form-table" role="presentation">
+                            <tbody>
+                            <?php foreach ( $section_fields as $name => $field ) : ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?php if ( ! empty( $field['label'] ) ) : ?>
+                                            <label for="<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+                                        <?php endif; ?>
+                                    </th>
+                                    <td>
+                                    <?php $this->render_field_by_type( $name, $field ); ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?php
+                    endforeach;
+
+                    $unsectioned = array();
+                    foreach ( $this->fields as $name => $field ) {
+                        if ( empty( $field['section'] ) || ! isset( $this->sections[ $field['section'] ] ) ) {
+                            $unsectioned[ $name ] = $field;
+                        }
+                    }
+                    if ( ! empty( $unsectioned ) ) : ?>
+                        <table class="form-table" role="presentation">
+                            <tbody>
+                            <?php foreach ( $unsectioned as $name => $field ) : ?>
+                                <tr>
+                                    <th scope="row">
+                                        <?php if ( ! empty( $field['label'] ) ) : ?>
+                                            <label for="<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+                                        <?php endif; ?>
+                                    </th>
+                                    <td>
+                                    <?php $this->render_field_by_type( $name, $field ); ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
+                <?php else : ?>
                     <table class="form-table" role="presentation">
                         <tbody>
                         <?php foreach ( $this->fields as $name => $field ) : ?>
-                        <tr>
-                        <th scope="row">
-                            <?php if ( ! empty( $field['label'] ) ) : ?>
-                                <label for="<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
-                            <?php endif; ?>
-                        </th>
-                        <td>
-                        <?php
-                        switch ( $field['type'] ) {
-                            case 'textarea':
-                                $this->render_textarea_field( $name, $field );
-                                break;
-                            case 'select':
-                                $this->render_select_field( $name, $field );
-                                break;
-                            case 'checkbox':
-                                $this->render_checkbox_field( $name );
-                                break;
-                            default:
-                                $this->render_input_field( $name, $field );
-                                break;
-                        }
-                        ?>
-                        </td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
+                            <tr>
+                                <th scope="row">
+                                    <?php if ( ! empty( $field['label'] ) ) : ?>
+                                        <label for="<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+                                    <?php endif; ?>
+                                </th>
+                                <td>
+                                <?php $this->render_field_by_type( $name, $field ); ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
                 <?php submit_button(); ?>
             </form>
         </div>
         <?php
+    }
+
+    /**
+     * Renders a field by its declared type.
+     *
+     * @param string $name  Field name.
+     * @param array  $field Field configuration.
+     * @since 1.3.0
+     */
+    private function render_field_by_type( $name, $field ) {
+        switch ( $field['type'] ) {
+            case 'textarea':
+                $this->render_textarea_field( $name, $field );
+                break;
+            case 'select':
+                $this->render_select_field( $name, $field );
+                break;
+            case 'checkbox':
+                $this->render_checkbox_field( $name );
+                break;
+            default:
+                $this->render_input_field( $name, $field );
+                break;
+        }
     }
 
     /**
