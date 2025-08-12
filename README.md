@@ -7,6 +7,7 @@ This repository introduces a PHP class designed to simplify the creation of cust
 - **Ease of Options Page Creation**: Enables the easy creation of options pages within WordPress.
 - **Customizable Fields**: Supports various field types such as textarea, select, text, checkbox, email, color, etc.
 - **Advanced Media Integration**: Specific keywords in placeholders trigger the opening of the WordPress media library.
+- **Sections Grouping**: Group fields into titled sections for clearer organization.
 
 ## Installation and Setup
 
@@ -20,40 +21,39 @@ require_once 'path/to/wp-options-page/class-option-page.php';
 ## Usage Example
 
 ```php
-function add_params_options_page() {
-    $option = new Option_Page( 'Params', 'params_options_page' );
+function add_site_options_page() {
+    $option = new Option_Page( 'Site Settings', 'site_settings' );
 
-    $option->add_field(
-        'text',
-        'my_param_name',
-        array(
-            'label'       => 'Name',
-            'placeholder' => 'Enter your name',
-        )
-    );
+    // Sections for organization
+    $option->add_section( 'general', 'General' );
+    $option->add_section( 'contact', 'Contact' );
+    $option->add_section( 'social', 'Social Networks' );
 
-    $option->add_field(
-        'select',
-        'my_param_option',
-        array(
-            'label'   => 'Option',
-            'options' => [
-                'Option 1',
-                'Option 2',
-            ],
-        )
-    );
+    // Text and media integration
+    $option->add_field( 'text', 'site_tagline', array( 'label' => 'Tagline', 'section' => 'general' ) );
+    $option->add_field( 'url', 'site_logo', array( 'label' => 'Logo', 'placeholder' => 'Select image ~ 200px', 'section' => 'general' ) );
+    $option->add_field( 'color', 'brand_color', array( 'label' => 'Brand color', 'section' => 'general' ) );
+    $option->add_field( 'checkbox', 'maintenance_mode', array( 'label' => 'Maintenance mode', 'section' => 'general' ) );
 
-    $option->add_field(
-        'url',
-        'my_param_avatar',
-        array(
-            'label'       => 'Avatar',
-            'placeholder' => 'Select your avatar ~ 100px',
-        )
-    );
+    // Select with options
+    $option->add_field( 'select', 'layout', array(
+        'label' => 'Layout',
+        'options' => array( 'grid' => 'Grid', 'list' => 'List' ),
+        'section' => 'general'
+    ) );
+
+    // Contact fields
+    $option->add_field( 'email', 'contact_email', array( 'label' => 'Email', 'section' => 'contact' ) );
+    $option->add_field( 'textarea', 'address', array( 'label' => 'Address', 'rows' => 3, 'section' => 'contact' ) );
+
+    // Social URLs
+    $option->add_field( 'url', 'facebook_url', array( 'label' => 'Facebook', 'section' => 'social' ) );
+    $option->add_field( 'url', 'twitter_url', array( 'label' => 'Twitter', 'section' => 'social' ) );
+
+    // Field without section
+    $option->add_field( 'textarea', 'custom_css', array( 'label' => 'Custom CSS', 'rows' => 8 ) );
 }
-add_action( 'init', 'add_params_options_page' );
+add_action( 'init', 'add_site_options_page' );
 ```
 
 ## Contributing
