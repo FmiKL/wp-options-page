@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.0
+ * @version 1.3.1
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -299,7 +299,7 @@ class Option_Page {
         wp_enqueue_media();
 
         if ( ! wp_script_is( 'field-media', 'registered' ) ) {
-            wp_enqueue_script( 'field-media', get_template_directory_uri() . self::ASSETS_PATH . '/js/field-media.js', array(), false, true );
+            wp_enqueue_script( 'field-media', get_template_directory_uri() . self::ASSETS_PATH . '/js/field-media.js', array(), null, true );
         }
     }
 
