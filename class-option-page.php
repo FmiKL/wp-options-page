@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.1
+ * @version 1.3.2
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -291,6 +291,42 @@ class Option_Page {
     }
 
     /**
+     * Sanitizes a field value based on its type.
+     *
+     * @param mixed $input Raw input value.
+     * @param array $field Field configuration.
+     * @since 1.3.2
+     */
+    private function sanitize_field_value( $input, $field ) {
+        if ( is_array( $input ) ) {
+            return '';
+        }
+
+        $type  = $field['type'] ?? 'text';
+        $value = trim( (string) $input );
+
+        switch ( $type ) {
+            case 'checkbox':
+                return ( '1' === $value ) ? '1' : '0';
+            case 'email':
+                return sanitize_email( $value );
+            case 'url':
+                return esc_url_raw( $value );
+            case 'number':
+                return is_numeric( $value ) ? $value : '';
+            case 'color':
+                return sanitize_hex_color( $value ) ?: '';
+            case 'textarea':
+                return sanitize_textarea_field( $value );
+            case 'select':
+                $options = is_array( $field['options'] ?? null ) ? array_values( $field['options'] ) : array();
+                return in_array( $value, $options, true ) ? $value : '';
+            default:
+                return sanitize_text_field( $value );
+        }
+    }
+
+    /**
      * Enqueues the necessary scripts.
      * 
      * @since 1.0.0
@@ -312,12 +348,19 @@ class Option_Page {
     public function register_setting() {
         foreach ( $this->fields as $name => $field ) {
             register_setting( $this->key, $name, array(
-                'sanitize_callback' => function ( $input ) use ( $name ) {
-                    if ( empty( $input ) ) {
+                'sanitize_callback' => function ( $input ) use ( $name, $field ) {
+                    if ( null === $input || '' === $input ) {
                         delete_option( $name );
                         return false;
                     }
-                    return $input;
+
+                    $sanitized = $this->sanitize_field_value( $input, $field );
+                    if ( '' === $sanitized ) {
+                        delete_option( $name );
+                        return false;
+                    }
+
+                    return $sanitized;
                 }
             ) );
         }
