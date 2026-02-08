@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.7
+ * @version 1.4.0
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -229,6 +229,9 @@ class Option_Page {
             case 'checkbox':
                 $this->render_checkbox_field( $name );
                 break;
+            case 'color':
+                $this->render_color_field( $name );
+                break;
             default:
                 $this->render_input_field( $name, $field );
                 break;
@@ -280,6 +283,23 @@ class Option_Page {
                 </option>
             <?php endforeach; ?>
         </select>
+        <?php
+    }
+
+    /**
+     * Renders the color field.
+     *
+     * @param string $name Name of the field.
+     * @since 1.4.0
+     */
+    private function render_color_field( $name ) {
+        ?>
+        <input
+            type="color"
+            id="<?php echo esc_attr( $name ); ?>"
+            name="<?php echo esc_attr( $name ); ?>"
+            value="<?php echo esc_attr( get_option( $name, '#000000' ) ); ?>"
+        >
         <?php
     }
 
