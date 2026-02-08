@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.6
+ * @version 1.3.7
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -263,6 +263,7 @@ class Option_Page {
      */
     private function render_select_field( $name, $field ) {
         $current_value = get_option( $name );
+        $label         = $field['label'] ?? '';
         $choices       = $field['choices'] ?? array();
         ?>
         <select
@@ -270,6 +271,9 @@ class Option_Page {
             class="regular-text"
             name="<?php echo esc_attr( $name ); ?>"
         >
+            <?php if ( $label ) : ?>
+                <option value="" <?php echo $current_value ? '' : 'selected'; ?> disabled><?php echo esc_html( $label ); ?></option>
+            <?php endif; ?>
             <?php foreach ( $choices as $choice ) : ?>
                 <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( $current_value, $choice ); ?>>
                     <?php echo esc_html( $choice ); ?>
