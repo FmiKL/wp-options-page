@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.3
+ * @version 1.3.4
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -63,7 +63,7 @@ class Option_Page {
     }
 
     /**
-     * Adds hooks the methods to the appropriate actions.
+     * Hooks the methods to the appropriate actions.
      * 
      * @since 1.0.0
      */
@@ -239,7 +239,7 @@ class Option_Page {
      * Renders the textarea field.
      *
      * @param string $name  Name of the field.
-     * @param array  $field Field to render an input for.
+     * @param array  $field Field to render a textarea for.
      * @since 1.2.0
      */
     private function render_textarea_field( $name, $field ) {
@@ -258,7 +258,7 @@ class Option_Page {
      * Renders the select field.
      * 
      * @param string $name  Name of the field.
-     * @param array  $field Field to render an input for.
+     * @param array  $field Field to render a select for.
      * @since 1.1.0
      */
     private function render_select_field( $name, $field ) {
@@ -321,6 +321,7 @@ class Option_Page {
      *
      * @param mixed $input Raw input value.
      * @param array $field Field configuration.
+     * @return string Sanitized value or empty string on invalid input.
      * @since 1.3.2
      */
     private function sanitize_field_value( $input, $field ) {
