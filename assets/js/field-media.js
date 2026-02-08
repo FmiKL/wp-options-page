@@ -1,4 +1,5 @@
 jQuery(document).ready(function($) {
+    // Open the media library only for inputs that look like media fields.
     const inputMatch = /image|avatar|icon|pdf/i;
     let mediaUploader;
 
@@ -22,6 +23,8 @@ jQuery(document).ready(function($) {
             const attachmentUrl = attachment.url;
             const matches = $(input).attr('placeholder').match(/\d+px/);
 
+            // If the placeholder contains a target size (e.g. "300px"),
+            // use the closest available image size instead of the full source.
             if (matches && attachment.sizes && Object.keys(attachment.sizes).length > 0) {
                 let thumbnailUrl = '';
                 const sizes = Object.keys(attachment.sizes).sort((a, b) => {
