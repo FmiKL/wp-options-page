@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.2
+ * @version 1.3.3
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -43,6 +43,15 @@ class Option_Page {
     private $fields = array();
 
     /**
+     * Sections to group fields.
+     *
+     * @var array<string, array>
+     * @since 1.3.0
+     * @see Option_Page::add_section()
+     */
+    private $sections = array();
+
+    /**
      * @param string $title Title of the page.
      * @param string $key   Unique identifier needed to register the settings.
      * @since 1.0.0
@@ -62,6 +71,23 @@ class Option_Page {
         add_action( 'admin_menu', array( $this, 'add_page' ) );
         add_action( 'admin_init', array( $this, 'register_setting' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueues_scripts' ) );
+    }
+
+    /**
+     * Adds a new section.
+     *
+     * Sections allow you to group fields visually on the options page.
+     *
+     * @param string $id          Unique ID of the section.
+     * @param string $title       Title of the section.
+     * @param string $description Optional description displayed under the section title.
+     * @since 1.3.0
+     */
+    public function add_section( $id, $title, $description = '' ) {
+        $this->sections[ $id ] = array(
+            'title'       => $title,
+            'description' => $description,
+        );
     }
 
     /**
