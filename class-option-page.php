@@ -4,7 +4,7 @@
  * 
  * @package WP_Options_Page
  * @author Mikael Fourré
- * @version 1.3.4
+ * @version 1.3.6
  * @see https://github.com/FmiKL/wp-options-page
  */
 class Option_Page {
@@ -263,15 +263,16 @@ class Option_Page {
      */
     private function render_select_field( $name, $field ) {
         $current_value = get_option( $name );
+        $choices       = $field['choices'] ?? array();
         ?>
         <select
             id="<?php echo esc_attr( $name ); ?>"
             class="regular-text"
             name="<?php echo esc_attr( $name ); ?>"
         >
-            <?php foreach ( $field['options'] as $option ) : ?>
-                <option value="<?php echo esc_attr( $option ); ?>" <?php selected( $current_value, $option ); ?>>
-                    <?php echo esc_html( $option ); ?>
+            <?php foreach ( $choices as $choice ) : ?>
+                <option value="<?php echo esc_attr( $choice ); ?>" <?php selected( $current_value, $choice ); ?>>
+                    <?php echo esc_html( $choice ); ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -346,8 +347,8 @@ class Option_Page {
             case 'textarea':
                 return sanitize_textarea_field( $value );
             case 'select':
-                $options = is_array( $field['options'] ?? null ) ? array_values( $field['options'] ) : array();
-                return in_array( $value, $options, true ) ? $value : '';
+                $choices = is_array( $field['choices'] ?? null ) ? array_values( $field['choices'] ) : array();
+                return in_array( $value, $choices, true ) ? $value : '';
             default:
                 return sanitize_text_field( $value );
         }
